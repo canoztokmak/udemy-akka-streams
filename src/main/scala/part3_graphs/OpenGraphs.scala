@@ -1,8 +1,11 @@
 package part3_graphs
 
+import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, FlowShape, SinkShape, SourceShape}
 import akka.stream.scaladsl.{Broadcast, Concat, Flow, GraphDSL, Sink, Source}
+
+import scala.concurrent.Future
 
 object OpenGraphs extends App {
   implicit val actorSystem = ActorSystem("OpenGraphs")
@@ -63,8 +66,8 @@ object OpenGraphs extends App {
     GraphDSL.create() { implicit builder =>
       import GraphDSL.Implicits._
 
-      val flow1 = Flow[Int].map(_ + 1)
-      val flow2 = Flow[Int].map(_ * 10)
+      val flow1: Flow[Int, Int, NotUsed] = Flow[Int].map(_ + 1)
+      val flow2: Flow[Int, Int, NotUsed] = Flow[Int].map(_ * 10)
 
       val incrementerShape = builder.add(flow1)
       val multiplierShape = builder.add(flow2)
